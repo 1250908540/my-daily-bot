@@ -22,7 +22,7 @@ def get_data():
     star_info = "运势获取失败"
     try:
         # 确保已经在天行官网点击了“申请接口”
-        s_url = f"https://apis.tianapi.com/star/index?key={TIAN_KEY.strip()}&astro=狮子座"
+        s_url = f"https://apis.tianapi.com/star/index?key={TIAN_KEY.strip()}&astro=巨蟹座"
         s_res = requests.get(s_url).json()
         
         if s_res.get('code') == 200:
