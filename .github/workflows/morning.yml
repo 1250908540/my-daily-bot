@@ -3,11 +3,9 @@ name: Morning Bot
 on:
   workflow_dispatch:
   schedule:
-    # 这里的 cron 分别对应北京时间的 12:15, 20:15, 07:15
-    - cron: '55 4 * * *'
-    
-    - cron: '15 12 * * *'
-    - cron: '15 23 * * *'
+    - cron: '12 5 * * *'  # 北京时间 13:10 (测试用)
+    - cron: '15 12 * * *' # 北京时间 20:15
+    - cron: '15 23 * * *' # 北京时间 07:15
 
 jobs:
   build:
