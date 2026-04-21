@@ -14,8 +14,13 @@ def push_bark(title, content):
 def get_data():
     # 1. 获取天气 (和风)
     weather_url = f"https://devapi.qweather.com/v7/weather/now?location=101010100&key={WEATHER_KEY}"
-    w_data = requests.get(weather_url).json()['now']
-    weather_text = f"天气：{w_data['text']}，温度：{w_data['temp']}度"
+   # 修改后（增加报错打印）
+    response = requests.get(weather_url)
+    res = response.json()
+    if res.get('code') != '200':
+    print(f"天气接口报错啦！错误码：{res.get('code')}。请去和风天气文档查一下这个错误码的意思。")
+    # 如果接口报错了，这里会打印出具体原因，比如 401 代表 KEY 错误，403 代表权限问题
+w_data = res['now']
 
     # 2. 获取星座运势 (天行)
     star_url = f"https://apis.tianapi.com/star/index?key={TIAN_KEY}&astro=lion" # 以狮子座为例
