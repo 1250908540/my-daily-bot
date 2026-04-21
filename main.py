@@ -10,7 +10,8 @@ def get_data():
     weather_info = "校准中"
     try:
         # 1. 尝试获取天气 - 加上 headers 模拟浏览器，防止被拦截
-        w_url = f"https://devapi.qweather.com/v7/weather/now?location=101010100&key={WEATHER_KEY.strip()}"
+        w_url = f"https://kt4d94dyn4.re.qweatherapi.com/v7/weather/now?location=101010100&key={WEATHER_KEY.strip()}"
+        # https://your_api_host/v7/weather/now?location=101010100
         headers = {'User-Agent': 'Mozilla/5.0'}
         res = requests.get(w_url, headers=headers)
         
