@@ -3,7 +3,7 @@ name: Morning Bot
 on:
   workflow_dispatch:
   schedule:
-    - cron: '12 5 * * *'  # 北京时间 13:10 (测试用)
+    - cron: '00 6 * * *'  # 北京时间 13:10 (测试用)
     - cron: '15 12 * * *' # 北京时间 20:15
     - cron: '15 23 * * *' # 北京时间 07:15
 
