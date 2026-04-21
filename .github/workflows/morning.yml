@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
   schedule:
     # 这里的 cron 分别对应北京时间的 12:15, 20:15, 07:15
-    - cron: '15 4 * * *'
     - cron: '20 4 * * *'
+    - cron: '15 12 * * *'
     - cron: '15 23 * * *'
 
 jobs:
