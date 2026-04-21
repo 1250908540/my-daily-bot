@@ -1,48 +1,42 @@
 import requests
 import os
-import sys
 
-# 从 GitHub Secrets 中读取
+# 配置区 (建议直接在这里写死 Key 测试，成功后再改回 os.getenv)
+WEATHER_KEY = "440e0c69838e4fb997475d59f20a3f85"  # 填入你那个以 440e 开头的字符串
+TIAN_KEY = "c61886baf3e1feba3955bc4807e8e0eb"    # 填入天行数据后台看到的 APIKEY
 BARK_KEY = os.getenv("BARK_KEY")
-WEATHER_KEY = os.getenv("WEATHER_KEY")
-TIAN_KEY = os.getenv("TIAN_KEY")
 
 def get_data():
-    # 1. 天气 (和风) - 换成 location=beijing 试试，确保 Key 是 Web API 类型
-    weather_info = "天气获取失败"
+    # 1. 获取天气
+    w_info = "天气获取失败"
     try:
-        # 注意：这里我们换成了城市拼音，增加兼容性
-        w_url = f"https://devapi.qweather.com/v7/weather/now?location=101010100&key={WEATHER_KEY.strip()}"
-        res = requests.get(w_url)
-        data = res.json()
-        if data.get('code') == '200':
-            w = data['now']
-            weather_info = f"天气：{w['text']}，{w['temp']}°C"
+        # 强制使用免费版 devapi 域名
+        url = f"https://devapi.qweather.com/v7/weather/now?location=101010100&key={WEATHER_KEY.strip()}"
+        res = requests.get(url).json()
+        if res.get('code') == '200':
+            w_info = f"北京天气：{res['now']['text']} {res['now']['temp']}°C"
         else:
-            weather_info = f"天气Key或权限问题({data.get('code')})"
+            w_info = f"天气报错:{res.get('code')}"
     except:
-        weather_info = "天气解析异常"
+        w_info = "天气网络异常"
 
-    # 2. 星座 (天行) - 换成中文星座名
-    star_info = "运势获取失败"
+    # 2. 获取运势 (尝试狮子座)
+    s_info = "运势获取失败"
     try:
-        # 天行数据有时对中文星座名支持更好
+        # 这里尝试用中文名，记得去后台点“申请接口”按钮
         s_url = f"https://apis.tianapi.com/star/index?key={TIAN_KEY.strip()}&astro=狮子座"
-        res = requests.get(s_url)
-        data = res.json()
-        if data.get('code') == 200:
-            star_info = data['result'].get('content', '今日暂无运势更新')
+        res = requests.get(s_url).json()
+        if res.get('code') == 200:
+            s_info = res['result'].get('content', '今日暂无运势数据')
         else:
-            star_info = f"运势问题:{data.get('msg')}"
+            s_info = f"运势报错:{res.get('msg')}"
     except:
-        star_info = "运势解析异常"
+        s_info = "运势网络异常"
 
-    return weather_info, star_info
+    return w_info, s_info
 
 if __name__ == "__main__":
     w, s = get_data()
     msg = f"{w}\n\n运势：{s}"
-    # 推送到手机
-    push_url = f"https://api.day.app/{BARK_KEY}/早安校准/{msg}"
-    requests.get(push_url)
-    print("DONE: 推送请求已发出")
+    # 最终推送
+    requests.get(f"https://api.day.app/{BARK_KEY}/早安校准/{msg}")
