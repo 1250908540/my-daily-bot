@@ -1,0 +1,28 @@
+name: Morning Bot
+
+on:
+  schedule:
+    - cron: '0 23 * * *' # 北京时间早上 7:00
+  workflow_dispatch:      # 必须有这一行，才能在 Actions 页面看到手动运行按钮
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v3
+
+      - name: 安装 Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: 安装必要库
+        run: pip install requests
+
+      - name: 运行脚本
+        env:
+          BARK_KEY: ${{ secrets.BARK_KEY }}
+          WEATHER_KEY: ${{ secrets.WEATHER_KEY }}
+          TIAN_KEY: ${{ secrets.TIAN_KEY }}
+        run: python main.py morning
