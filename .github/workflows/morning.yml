@@ -1,11 +1,12 @@
 name: Morning Bot
 
 on:
-  schedule:
-    - cron: '0 23 * * *'  # 北京 07:00 (UTC 23:00)
-    - cron: '15 4 * * *'   # 北京 12:00 (UTC 04:00)
-    - cron: '0 12 * * *'  # 北京 20:00 (UTC 12:00)
-  workflow_dispatch:      # 必须有这一行，才能在 Actions 页面看到手动运行按钮
+  workflow_dispatch:      # 手动触发按钮
+  schedule:               # 定时触发
+    - cron: '15 4 * * *'  # 12:15推送，注意横杠前有空格
+    - cron: '15 12 * * *' # 20:15推送
+    - cron: '15 23 * * *' # 07:15推送
+  
 
 jobs:
   build:
