@@ -19,7 +19,7 @@ def get_data():
             # 整合风向、降水、体感温度、湿度等
             weather_info = (
                 f"📍 天津实时天气报：\n"
-                f"【数据观测时间】 {now['obsTime']}°C\n"
+                f"【数据观测时间】 {now['obsTime']}\n"
                 f"【状况】{now['text']} | 体感 {now['feelsLike']}°C\n"
                 f"【气温】当前 {now['temp']}°C\n"
                 f"【风向】{now['windDir']} {now['windScale']}级\n"
