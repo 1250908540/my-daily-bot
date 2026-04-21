@@ -3,7 +3,7 @@ import os
 
 # --- 配置区 ---
 # 请在 GitHub Secrets 里增加一个 API_HOST，填入你后台看到的地址（比如 devapi.qweather.com）
-API_HOST = os.getenv("API_HOST", "devapi.qweather.com") 
+API_HOST = os.getenv("API_HOST") 
 WEATHER_KEY = os.getenv("WEATHER_KEY")
 TIAN_KEY = os.getenv("TIAN_KEY")
 BARK_KEY = os.getenv("BARK_KEY")
