@@ -11,27 +11,35 @@ BARK_KEY = os.getenv("BARK_KEY")
 def get_data():
     weather_info = "校准中"
     try:
-        # 直接把参数写在 params 字典里，由 Python 自动拼 URL，这样最稳！
-        url = "https://kt4d94dyn4.re.qweatherapi.com/v7/weather/now"
-        params = {
-            "location": "101010100",  # 北京的 ID
-            "key": WEATHER_KEY.strip()
-        }
-        res = requests.get(url, params=params)
-        data = res.json()
+        # 1. 尝试获取天气 - 加上 headers 模拟浏览器，防止被拦截
+        w_url = f"https://{API_HOST}/v7/weather/now?location=101010100&key={WEATHER_KEY.strip()}"
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        res = requests.get(w_url, headers=headers)
         
-        # 打印出来在 Actions 日志里看一眼，这叫“自救式日志”
-        print(f"DEBUG 返回的全部内容: {data}")
+        # 关键：先打印出前100个字符，看看返回的是不是 <html>
+        print(f"DEBUG 原始返回内容: {res.text[:100]}")
         
-        # 兼容性判断
-        if str(data.get('code')) == '200':
-            now = data['now']
-            weather_info = f"北京:{now['text']} {now['temp']}°C"
-        else:
-            # 如果拿不到 code，就把整个 data 变成字符串发给你
-            weather_info = f"异常内容:{str(data)[:50]}"
-            
+        try:
+            data = res.json()
+            if data.get('code') == '200':
+                weather_info = f"天气：{data['now']['text']} {data['now']['temp']}°C"
+            else:
+                weather_info = f"和风报错码：{data.get('code')}"
+        except:
+            # 如果不是 JSON，说明返回了 HTML 报错页
+            if "Invalid Host" in res.text:
+                weather_info = "域名/Key不匹配(请检查是否为devapi)"
+            elif "403" in res.text:
+                weather_info = "和风403拒绝访问(请确认后台无IP限制)"
+            else:
+                weather_info = "API返回了非JSON格式数据"
+                
     except Exception as e:
-        weather_info = f"请求崩溃:{str(e)[:20]}"
+        weather_info = f"网络请求异常"
         
     return weather_info
+
+if __name__ == "__main__":
+    w = get_data()
+    # 把详细错误推送到手机
+    requests.get(f"https://api.day.app/{BARK_KEY}/最终定位/{w}")
