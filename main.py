@@ -12,7 +12,7 @@ def get_data():
     weather_info = "校准中"
     try:
         # 直接把参数写在 params 字典里，由 Python 自动拼 URL，这样最稳！
-        url = "https://{API_HOST}/v7/weather/now"
+        url = "https://kt4d94dyn4.re.qweatherapi.com/v7/weather/now"
         params = {
             "location": "101010100",  # 北京的 ID
             "key": WEATHER_KEY.strip()
