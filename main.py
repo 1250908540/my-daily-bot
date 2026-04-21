@@ -8,19 +8,15 @@ WEATHER_KEY = os.getenv("WEATHER_KEY")
 TIAN_KEY = os.getenv("TIAN_KEY")
 
 def get_data():
-    # 1. 天气 (和风)
+    # 1. 天气 (增加诊断信息)
     weather_info = "天气获取失败"
     try:
         w_url = f"https://devapi.qweather.com/v7/weather/now?location=101010100&key={WEATHER_KEY}"
-        w_res = requests.get(w_url).json()
-        if w_res.get('code') == '200':
-            w = w_res['now']
-            weather_info = f"天气：{w['text']}，{w['temp']}°C"
-        else:
-            weather_info = f"天气报错: {w_res.get('code')}"
-    except Exception as e:
-        weather_info = f"天气程序异常: {str(e)[:20]}"
-
+        response = requests.get(w_url)
+        print(f"天气接口返回状态码: {response.status_code}") # 诊断信息
+        print(f"天气接口返回原文: {response.text}")        # 诊断信息
+        w_res = response.json()
+        # ... 后面的保持不变 ...
     # 2. 星座 (天行)
     star_info = "运势获取失败"
     try:
