@@ -9,36 +9,29 @@ TIAN_KEY = os.getenv("TIAN_KEY")
 BARK_KEY = os.getenv("BARK_KEY")
 
 def get_data():
-    weather_info = "天气获取中"
+    weather_info = "校准中"
     try:
-        # 手动拼接完整的 URL
-        # 此时 URL 会变成 https://你的HOST/v7/weather/now?...
-        url = f"https://{API_HOST.strip()}/v7/weather/now"
+        # 直接把参数写在 params 字典里，由 Python 自动拼 URL，这样最稳！
+        url = "https://{API_HOST}/v7/weather/now"
         params = {
-            "location": "101010100", 
+            "location": "101010100",  # 北京的 ID
             "key": WEATHER_KEY.strip()
         }
-        
         res = requests.get(url, params=params)
         data = res.json()
         
-        # 调试核心：输出最终生成的完整 URL（隐藏 Key）
-        print(f"DEBUG 请求域名: {API_HOST}")
-        print(f"DEBUG 完整返回数据: {data}")
-
+        # 打印出来在 Actions 日志里看一眼，这叫“自救式日志”
+        print(f"DEBUG 返回的全部内容: {data}")
+        
+        # 兼容性判断
         if str(data.get('code')) == '200':
             now = data['now']
-            weather_info = f"天气：{now['text']} {now['temp']}°C"
+            weather_info = f"北京:{now['text']} {now['temp']}°C"
         else:
-            weather_info = f"错误码：{data.get('code')} 内容：{data.get('msg', '无信息')}"
+            # 如果拿不到 code，就把整个 data 变成字符串发给你
+            weather_info = f"异常内容:{str(data)[:50]}"
             
     except Exception as e:
-        weather_info = f"请求崩溃：{str(e)[:30]}"
+        weather_info = f"请求崩溃:{str(e)[:20]}"
         
     return weather_info
-
-if __name__ == "__main__":
-    w = get_data()
-    # 天行数据的星座部分保持你之前的申请状态
-    # 这里我们先只测试天气是否打通
-    requests.get(f"https://api.day.app/{BARK_KEY}/Host校准/{w}")
