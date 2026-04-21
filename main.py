@@ -18,7 +18,7 @@ def get_data():
         weather_info = f"天气获取失败(错误码:{w_res.get('code')})"
 
     # 2. 星座 (天行数据)
-    star_url = f"https://apis.tianapi.com/star/index?key={TIAN_KEY}&astro=lion"
+    star_url = f"https://apis.tianapi.com/star/index?key={TIAN_KEY}&astro=cancer"
     s_res = requests.get(star_url).json()
     star_info = s_res['result']['content'] if s_res.get('code') == 200 else "星座运势获取失败"
 
