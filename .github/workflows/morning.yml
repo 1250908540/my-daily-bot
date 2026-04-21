@@ -3,7 +3,7 @@ name: Morning Bot
 on:
   schedule:
     - cron: '0 23 * * *'  # 北京 07:00 (UTC 23:00)
-    - cron: '0 4 * * *'   # 北京 12:00 (UTC 04:00)
+    - cron: '15 4 * * *'   # 北京 12:00 (UTC 04:00)
     - cron: '0 12 * * *'  # 北京 20:00 (UTC 12:00)
   workflow_dispatch:      # 必须有这一行，才能在 Actions 页面看到手动运行按钮
 
