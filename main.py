@@ -42,7 +42,7 @@ def get_data():
                     f"【风力】{now['windDir']} {now['windScale']}级\n\n"
                 )
             # 运势
-            s_url = f"https://apis.tianapi.com/star/index?key={TIAN_KEY.strip()}&astro=狮子座"
+            s_url = f"https://apis.tianapi.com/star/index?key={TIAN_KEY.strip()}&astro=巨蟹座"
             s_res = requests.get(s_url, timeout=10).json()
             if s_res.get('code') == 200:
                 star_list = s_res['result'].get('list', [])
